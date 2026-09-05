@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { count, GOAT_CODE } from "./count.js";
+import { shareLine } from "./share.js";
 
 // The shared mountain. A companion (frog, dog, ...) brings its own drawing, lines, texts, palette and font.
 const HOUR = 3600 * 1000;
@@ -225,7 +226,7 @@ export function Scene({ companion, P, eyesClosed, tea, tilt = 0, reduced, sun, p
   const treeX = place.tree === "left" ? 56 : 268;
   const houseX = place.tree === "right" ? 44 : 250;
   return (
-    <svg viewBox="0 0 360 260" width="100%" style={{ display: "block" }} aria-label={companion.aria}>
+    <svg id="scene" viewBox="0 0 360 260" width="100%" style={{ display: "block" }} aria-label={companion.aria}>
       <defs>
         <linearGradient id="mistg" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor={P.paper} stopOpacity="0" />
@@ -458,6 +459,7 @@ export function Mountain({ companion, onSwitch, bowl }) {
   const [loadNote, setLoadNote] = useState("");
   const [showAbout, setShowAbout] = useState(false);
   const [bowlLine, setBowlLine] = useState(false);
+  const [shareNote, setShareNote] = useState("");
   const [phase, setPhase] = useState(phaseFor());
   const [sun, setSun] = useState(sunPos());
   const [weather, setWeather] = useState(weatherFor());
@@ -741,6 +743,17 @@ export function Mountain({ companion, onSwitch, bowl }) {
                     <p style={{ fontSize: 13, margin: 0, color: P.inkSoft }}>
                       {t.src}, brought home {dateShort(entry.at)}
                     </p>
+                    <button
+                      style={{ ...btnQuiet, border: "none", padding: 0, minWidth: 0, fontSize: 13, marginTop: 8, textDecoration: "underline", textUnderlineOffset: 3 }}
+                      onClick={async () => {
+                        count("share");
+                        const r = await shareLine({ svg: document.getElementById("scene"), P, font: FONT, companion, text: t, host: location.host });
+                        setShareNote(r === "saved" ? "Saved as a picture." : r === "failed" ? "Couldn't draw it this time." : "");
+                      }}
+                    >
+                      Share this line
+                    </button>
+                    {shareNote && <p style={{ fontSize: 13, margin: "6px 0 0", color: P.inkSoft }}>{shareNote}</p>}
                   </article>
                 );
               })}
