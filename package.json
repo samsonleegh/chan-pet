@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "record": "node scripts/record-visitors.mjs"
+    "record": "node scripts/record-visitors.mjs",
+    "digest": "node scripts/digest.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",
