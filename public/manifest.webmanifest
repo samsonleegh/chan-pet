@@ -1,0 +1,16 @@
+{
+  "name": "山中蛙",
+  "short_name": "山中蛙",
+  "description": "A frog on a mountain. Sit with it.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#DCD9D0",
+  "theme_color": "#DCD9D0",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
