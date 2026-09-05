@@ -19,7 +19,7 @@ function rng(seed) {
   return () => { q = (q * 1664525 + 1013904223) >>> 0; return q / 4294967296; };
 }
 // One place in the mountains, drawn from a seed.
-function placeFor(seed) {
+export function placeFor(seed) {
   const r = rng(seed);
   return {
     mountains: Math.floor(r() * 3),           // tall / rolling / jagged
@@ -56,7 +56,7 @@ function chooseLine(LINES, seed, phase, weather, place) {
 }
 function todayKey() { const d = new Date(); return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; }
 // Where the sun sits: rises at 6 on the left, sets at 19.5 on the right, arcing over the peaks.
-function sunPos(d = new Date()) {
+export function sunPos(d = new Date()) {
   const h = d.getHours() + d.getMinutes() / 60;
   const t = (h - 6) / 13.5;
   if (t < 0 || t > 1) return null;
@@ -205,7 +205,7 @@ function Cairn({ P, stones, x, y, scale = 1, seed = 1, opacity = 1 }) {
   return <g transform={`translate(${x} ${y}) scale(${scale})`} opacity={opacity}>{rows}</g>;
 }
 
-function Scene({ companion, P, eyesClosed, tea, tilt = 0, reduced, sun, place, weather, sits = 0 }) {
+export function Scene({ companion, P, eyesClosed, tea, tilt = 0, reduced, sun, place, weather, sits = 0 }) {
   const Creature = companion.Creature;
   const pouring = tilt > 0.5;
   const done = Math.floor(sits / STONES_PER_CAIRN);
