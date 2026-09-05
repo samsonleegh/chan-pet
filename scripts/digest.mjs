@@ -8,6 +8,7 @@ import { execFileSync } from "node:child_process";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const SITE = "fea7acdc-e28c-42a3-99b8-d7ec146b20bc";
+const DOG_SITE = "7c967476-21de-4434-98cf-ddcf58d13ccd"; // old dog address, still installed on some phones
 const BOWL_LINKS = ["plink_1UBzE0IbnXrR97bjHkpioDAm", "plink_1UBz7AIbnXrR97bjfxexc8gO"];
 
 const env = Object.fromEntries(fs.readFileSync(path.join(ROOT, ".env"), "utf8").split("\n").filter((l) => /^[A-Z_]+=/.test(l)).map((l) => [l.slice(0, l.indexOf("=")), l.slice(l.indexOf("=") + 1).trim()]));
@@ -17,7 +18,7 @@ const STRIPE = env.STRIPE_SECRET_KEY;
 const TG = env.TELEGRAM_BOT_TOKEN;
 const CHATS = (env.TELEGRAM_ALLOWED_USER_IDS || "").split(",").map((s) => s.trim()).filter(Boolean);
 
-async function nl(p) { const r = await fetch(`https://analytics.services.netlify.com/v2/${SITE}/${p}`, { headers: { Authorization: `Bearer ${NL}` } }); return r.json(); }
+async function nl(p, site = SITE) { const r = await fetch(`https://analytics.services.netlify.com/v2/${site}/${p}`, { headers: { Authorization: `Bearer ${NL}` } }); return r.json(); }
 async function st(p) { const r = await fetch(`https://api.stripe.com/v1/${p}`, { headers: { Authorization: "Basic " + Buffer.from(STRIPE + ":").toString("base64") } }); return r.json(); }
 
 // 1. record into the CSVs
@@ -37,6 +38,14 @@ const sum = (d) => (d.data || []).reduce((a, [, n]) => a + n, 0);
 const visitors = sum(vis), loads = sum(pv);
 const icon = (pages.data || []).find((r) => r.resource === "/index.html")?.count || 0;
 const top = (d, key) => (d.data || []).map((r) => `${r[key] || "direct"} ${r.count}`).join(", ") || "none";
+
+// the old dog address
+let dogLine = "";
+try {
+  const [dv, dp] = await Promise.all([nl(`visitors?${q}`, DOG_SITE), nl(`ranking/pages?${q}&limit=5`, DOG_SITE)]);
+  const dIcon = (dp.data || []).find((r) => r.resource === "/index.html")?.count || 0;
+  if (!dv.code) dogLine = `Old dog address: ${sum(dv)} visitors · icon opens ${dIcon}`;
+} catch (e) {}
 
 // 3-day trend from the CSV
 let trend = "";
@@ -68,6 +77,7 @@ const text = [
   `All time: ${allOpened} opened, ${allPaid} paid, ${sgd(allSgd)}`,
   `From: ${top(countries, "resource")}`,
   `Referrers: ${top(sources, "resource")}`,
+  dogLine,
   trend ? `Visitors, last 3 days: ${trend}` : "",
 ].filter(Boolean).join("\n");
 
