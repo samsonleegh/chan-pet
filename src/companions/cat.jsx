@@ -198,10 +198,10 @@ export default {
   blurb: "A rescued cat. Old poems, in Chinese.",
   // Who Pantha is, told in About.
   story: [
-    "Pantha was a rescue. Before, there was a street, and rain, and hands it couldn't trust. It doesn't dwell on that. Mostly.",
-    "Then Bak Jian Xun took it home: a bowl, a blanket, a quiet corner, and a surname to share. Pantha Bak.",
-    "The old fears still visit. When they do, Pantha climbs the mountain, finds its rock, folds its paws, and sits until its mind is still again. Not to forget. Just until the fear is smaller than the mountain.",
-    "The first person it asked to sit with it was Jian Xun. It is grateful the way cats are: without saying so, and for good. There is room on the rock for you too.",
+    "Pantha was a rescue. Before, there was the street: the rain, the noise, and hands it learned not to trust.",
+    "Then Bak Jian Xun carried it home. A bowl, a blanket, a quiet corner to sleep in, and a surname to share. Pantha Bak.",
+    "Some of the old fear came along anyway. When it stirs, Pantha climbs the mountain, finds its rock, folds its paws, and sits until its mind is still again. It isn't trying to forget. Only to let the fear grow smaller than the mountain.",
+    "The first person Pantha invited up was Jian Xun. It will be grateful for the rest of its nine lives, though, being a cat, it will never say so. There is room on the rock for you, too.",
   ],
   font: FONT,
   palettes: PALETTES,
