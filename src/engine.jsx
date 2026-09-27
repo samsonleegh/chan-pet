@@ -54,6 +54,9 @@ function chooseLine(LINES, seed, phase, weather, place) {
   const pool = pools[Math.floor(r() * pools.length)];
   return pool.length ? pool[Math.floor(r() * pool.length)] : "";
 }
+// "the frog" -> "The frog"; "Pantha Bak" stays as it is.
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
 function todayKey() { const d = new Date(); return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; }
 // Where the sun sits: rises at 6 on the left, sets at 19.5 on the right, arcing over the peaks.
 export function sunPos(d = new Date()) {
@@ -444,7 +447,7 @@ export function Scene({ companion, P, eyesClosed, tea, tilt = 0, reduced, sun, p
 }
 
 
-export function Mountain({ companion, onSwitch, bowl }) {
+export function Mountain({ companion, onSwitch, bowl, others }) {
   const FONT = companion.font;
   const KEY = companion.storageKey;
   const [state, setState] = useState(null);
@@ -643,9 +646,9 @@ export function Mountain({ companion, onSwitch, bowl }) {
 
   
   let line;
-  if (mode === "sit") line = `Sitting ${sitMin} minutes. The ${companion.name} is sitting too.`;
+  if (mode === "sit") line = `Sitting ${sitMin} minutes. ${cap(companion.called)} is sitting too.`;
   else if (mode === "tea" && teaLeft <= 0) line = "The cup is empty.";
-  else if (state.frog.justReturned) line = `The ${companion.name} left something in the satchel. The path goes on.`;
+  else if (state.frog.justReturned) line = `${cap(companion.called)} left something in the satchel. The path goes on.`;
   else if (mode === "tea" && teaLeft > 0) line = chooseLine(companion.lines, (state.placeSeed || 1) + 5, "tea", "clear", { });
   else line = chooseLine(companion.lines, (state.placeSeed || 1) + phase.length + weather.length, phase, weather, placeFor(state.placeSeed || 1));
 
@@ -728,7 +731,7 @@ export function Mountain({ companion, onSwitch, bowl }) {
             <div style={{ marginTop: 14 }}>
               {state.satchel.length === 0 && (
                 <p style={{ color: P.inkSoft, fontSize: 15, lineHeight: 1.6, margin: 0 }}>
-                  Nothing yet. The {companion.name} leaves a line after you sit.
+                  Nothing yet. {cap(companion.called)} leaves a line after you sit.
                 </p>
               )}
               {state.satchel.map((entry) => {
@@ -746,7 +749,7 @@ export function Mountain({ companion, onSwitch, bowl }) {
               })}
               {bowlLine && (
                 <p style={{ color: P.inkSoft, fontSize: 15, lineHeight: 1.6, margin: "6px 0 0" }}>
-                  The {companion.name} costs nothing. If you would like to leave something for the person who drew the mountain, there is{" "}
+                  {cap(companion.called)} costs nothing. If you would like to leave something for the person who drew the mountain, there is{" "}
                   <a href={bowl.url(companion.id, "satchel")} target="_blank" rel="noopener" onClick={() => count("bowl-satchel")} style={{ color: P.ink }}>a bowl by the door</a>.
                 </p>
               )}
@@ -754,7 +757,7 @@ export function Mountain({ companion, onSwitch, bowl }) {
           )}
 
           {showAbout && (
-            <About P={P} FONT={FONT} companion={companion} bowl={bowl} onSwitch={onSwitch} onReset={() => { resetAll(); setShowAbout(false); }} btnQuiet={btnQuiet} />
+            <About P={P} FONT={FONT} companion={companion} bowl={bowl} onSwitch={onSwitch} others={others} onReset={() => { resetAll(); setShowAbout(false); }} btnQuiet={btnQuiet} />
           )}
         </div>
 
@@ -764,8 +767,8 @@ export function Mountain({ companion, onSwitch, bowl }) {
   );
 }
 
-// ---------- About: who made it, the other companion, the bowl, and a way to start again ----------
-function About({ P, FONT, companion, bowl, onSwitch, onReset, btnQuiet }) {
+// ---------- About: who made it, the other companions, the bowl, and a way to start again ----------
+function About({ P, FONT, companion, bowl, onSwitch, others, onReset, btnQuiet }) {
   const [sure, setSure] = useState(false);
   const p = { fontSize: 15, lineHeight: 1.6, margin: "0 0 14px", color: P.inkSoft };
   const link = { ...btnQuiet, border: "none", padding: 0, minWidth: 0, fontSize: 15, color: P.ink, textDecoration: "underline", textUnderlineOffset: 3 };
@@ -774,15 +777,19 @@ function About({ P, FONT, companion, bowl, onSwitch, onReset, btnQuiet }) {
       <p style={p}>{companion.title}. A {companion.name} on a mountain. Sit with it.</p>
       <p style={p}>I drew this when I was unwell, and it kept me company. Maybe it can keep you company too.</p>
       <p style={p}>No account. {GOAT_CODE ? "It counts opens and sits, not you." : "Nothing leaves your phone."} What you have seen stays in the satchel.</p>
-      {onSwitch && (
+      {onSwitch && others && others.length > 0 && (
         <p style={p}>
-          There is also {companion.other.article} {companion.other.name}, on another mountain.{" "}
-          <button style={link} onClick={onSwitch}>Sit with the {companion.other.name} instead</button>.
+          There is also {others.map((o) => o.intro).join(" and ")}, {others.length > 1 ? "each on another mountain" : "on another mountain"}.
+          {others.map((o) => (
+            <span key={o.id}>
+              {" "}<button style={link} onClick={() => onSwitch(o.id)}>Sit with {o.called} instead</button>.
+            </span>
+          ))}
         </p>
       )}
       {bowl && bowl.url && (
         <p style={p}>
-          The {companion.name} costs nothing. If you would like to leave something for the person who drew the mountain,{" "}
+          {cap(companion.called)} costs nothing. If you would like to leave something for the person who drew the mountain,{" "}
           <a href={bowl.url(companion.id, "about")} target="_blank" rel="noopener" onClick={() => count("bowl-about")} style={{ color: P.ink }}>there is a bowl by the door</a>.
         </p>
       )}
