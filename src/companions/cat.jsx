@@ -200,8 +200,8 @@ export default {
   story: [
     "Pantha was a rescue. Before, there was the street: the rain, the noise, and hands it learned not to trust.",
     "Then Bak Jian Xun carried it home. A bowl, a blanket, a quiet corner to sleep in, and a surname to share. Pantha Bak.",
-    "Some of the old fear came along anyway. When it stirs, Pantha climbs the mountain, finds its rock, folds its paws, and sits until its mind is still again. It isn't trying to forget. Only to let the fear grow smaller than the mountain.",
-    "The first person Pantha invited up was Jian Xun. It will be grateful for the rest of its nine lives, though, being a cat, it will never say so. There is room on the rock for you, too.",
+    "Some of the old fear came too. When it stirs, Pantha climbs to its rock, folds its paws, and sits until the fear is smaller than the mountain.",
+    "Jian Xun was the first it invited up. Grateful, all nine lives long, though it would never say so. There is room on the rock for you, too.",
   ],
   font: FONT,
   palettes: PALETTES,
