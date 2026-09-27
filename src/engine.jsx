@@ -775,6 +775,7 @@ function About({ P, FONT, companion, bowl, onSwitch, others, onReset, btnQuiet }
   return (
     <div style={{ marginTop: 14, fontFamily: FONT }}>
       <p style={p}>{companion.title}. A {companion.name} on a mountain. Sit with it.</p>
+      {(companion.story || []).map((t, i) => <p key={i} style={p}>{t}</p>)}
       <p style={p}>I drew this when I was unwell, and it kept me company. Maybe it can keep you company too.</p>
       <p style={p}>No account. {GOAT_CODE ? "It counts opens and sits, not you." : "Nothing leaves your phone."} What you have seen stays in the satchel.</p>
       {onSwitch && others && others.length > 0 && (

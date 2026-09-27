@@ -195,7 +195,14 @@ export default {
   intro: "a cat called Pantha Bak",
   title: "Pantha Bak",
   aria: "A place in the mountains, a rock, and a cat",
-  blurb: "A cat. Old poems, in Chinese.",
+  blurb: "A rescued cat. Old poems, in Chinese.",
+  // Who Pantha is, told in About.
+  story: [
+    "Pantha was a rescue. Before, there was a street, and rain, and hands it couldn't trust. It doesn't dwell on that. Mostly.",
+    "Then Bak Jian Xun took it home: a bowl, a blanket, a quiet corner, and a surname to share. Pantha Bak.",
+    "The old fears still visit. When they do, Pantha climbs the mountain, finds its rock, folds its paws, and sits until its mind is still again. Not to forget. Just until the fear is smaller than the mountain.",
+    "The first person it asked to sit with it was Jian Xun. It is grateful the way cats are: without saying so, and for good. There is room on the rock for you too.",
+  ],
   font: FONT,
   palettes: PALETTES,
   lines: LINES,
