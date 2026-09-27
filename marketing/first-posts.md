@@ -34,6 +34,10 @@ It's the thing that kept me company, so it's free and it stays free.
 
 ## 2. Xiaohongshu 小红书 — for the frog, same day or next
 
+**Posted 2026-09-06.** Link is in the comments, so the traffic will arrive as
+`(direct)` — watch for a jump in SG page loads on the 6th and 7th, not a new
+referrer row.
+
 **标题**
 一只坐在山里的青蛙，陪你坐五分钟
 

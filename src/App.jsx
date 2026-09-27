@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { Mountain } from "./engine.jsx";
 import frog from "./companions/frog.jsx";
 import dog from "./companions/dog.jsx";
+import cat from "./companions/cat.jsx";
 import { BOWL_URL, bowlUrl } from "./bowl.js";
 import { count } from "./count.js";
 
-const COMPANIONS = { frog, dog };
+const COMPANIONS = { frog, dog, cat };
+const ORDER = [frog, dog, cat];
 const META_KEY = "chan-pet-meta";
 const freshMeta = () => ({ companion: null, bowlSeen: false });
 
@@ -43,7 +45,7 @@ function Portrait({ companion, phase, reduced }) {
   const P = companion.palettes[phase];
   const Creature = companion.Creature;
   return (
-    <svg viewBox="-44 -40 88 62" width="96" height="68" aria-hidden="true" style={{ display: "block" }}>
+    <svg viewBox={companion.portraitViewBox || "-44 -40 88 62"} width="96" height="68" aria-hidden="true" style={{ display: "block" }}>
       <ellipse cx="0" cy="14" rx="36" ry="9" fill={P.paperDeep} stroke={P.ink} strokeWidth="1" />
       <Creature P={P} eyesClosed={false} reduced={reduced} />
     </svg>
@@ -64,7 +66,7 @@ function Chooser({ phase, onPick }) {
         <h1 style={{ margin: "0 0 4px", fontWeight: 400, fontSize: 22, letterSpacing: 0.5 }}>山</h1>
         <p style={{ margin: "0 0 26px", color: P.inkSoft, fontSize: 14 }}>{P.name}</p>
         <p style={{ fontSize: 15, lineHeight: 1.6, margin: "0 0 18px", color: P.inkSoft }}>Who will you sit with?</p>
-        {[frog, dog].map((c) => (
+        {ORDER.map((c) => (
           <button key={c.id} style={card} onClick={() => onPick(c.id)}>
             <Portrait companion={c} phase={phase} reduced={reduced} />
             <span>
@@ -107,7 +109,8 @@ export default function App() {
       key={companion.id}
       companion={companion}
       bowl={bowl}
-      onSwitch={() => update((m) => ({ ...m, companion: companion.other.name }))}
+      others={ORDER.filter((c) => c.id !== companion.id)}
+      onSwitch={(id) => update((m) => ({ ...m, companion: id }))}
     />
   );
 }

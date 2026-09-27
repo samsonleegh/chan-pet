@@ -17,10 +17,10 @@ const who = params.get("who") || "frog";
 const seed = Number(params.get("seed") || 4242);
 const sits = Number(params.get("sits") || 9);
 
-const [{ createRoot }, { Mountain }, frogMod, dogMod] = await Promise.all([
-  import("react-dom/client"), import("./engine.jsx"), import("./companions/frog.jsx"), import("./companions/dog.jsx"),
+const [{ createRoot }, { Mountain }, frogMod, dogMod, catMod] = await Promise.all([
+  import("react-dom/client"), import("./engine.jsx"), import("./companions/frog.jsx"), import("./companions/dog.jsx"), import("./companions/cat.jsx"),
 ]);
-const companion = who === "dog" ? dogMod.default : frogMod.default;
+const companion = who === "dog" ? dogMod.default : who === "cat" ? catMod.default : frogMod.default;
 
 window.storage = {
   async get(k) { const v = localStorage.getItem(k); if (v === null) throw new Error("not found"); return { key: k, value: v }; },
@@ -29,7 +29,7 @@ window.storage = {
 };
 localStorage.setItem(companion.storageKey, JSON.stringify({
   frog: { status: "home", awayUntil: null, leftAt: null, justReturned: false },
-  satchel: [{ id: "x", textId: params.get("line") || (who === "dog" ? "bs1" : "sz-12"), at: fixed }],
+  satchel: [{ id: "x", textId: params.get("line") || (who === "dog" ? "bs1" : who === "cat" ? "ly1" : "sz-12"), at: fixed }],
   sits: Array.from({ length: sits }, (_, i) => ({ at: fixed - i * 86400000, min: 15 })),
   teas: 0, seen: [], placeSeed: seed,
   placeDay: `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`,
